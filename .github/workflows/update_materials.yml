@@ -1,30 +1,33 @@
 name: Update materials from viyar.ua
- 
+
 on:
   schedule:
     - cron: '0 5 * * *'
   workflow_dispatch:
- 
+
 jobs:
   update-materials:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
- 
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
         env:
           FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
- 
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4
- 
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Install Python dependencies
+        run: pip install selenium webdriver-manager
+
       - name: Run parser
         run: python scripts/parse_materials.py
- 
+
       - name: Commit updated materials.json
         run: |
           git config user.name "github-actions[bot]"
@@ -32,4 +35,3 @@ jobs:
           git add data/materials.json
           git diff --cached --quiet || git commit -m "chore: update materials [$(date -u '+%Y-%m-%d %H:%M UTC')]"
           git push
- 
