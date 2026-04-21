@@ -1,0 +1,161 @@
+{
+  "_comment": "Правила видимості та залежностей елементів конструктора меблевих модулів. Версія 2.",
+
+  "defaults": {
+    "corpus":        "shafa",
+    "fasad":         "nakladnyi",
+    "zadnia_stinka": "dvp_v_paz",
+    "krysha":        "nakladna",
+    "baza":          "stijky_na_pidlohu",
+    "tsokol":        "vysota",
+    "tsokol_vysota": 70,
+    "opory":         "m6"
+  },
+
+  "corpus_rules": {
+    "_comment": "Які секції та опції доступні для кожного типу корпусу.",
+
+    "shafa": {
+      "section_options":       true,
+      "option_bezdna":         true,
+      "option_nisha":          true,
+      "section_zadnia_stinka": true,
+      "show_hlybyna":          true,
+      "section_baza_tsokol_opory": "show_if: shyryna <= 2770",
+      "section_krysha":        true,
+      "fasady_allowed":        ["nakladnyi", "vnutrishnii", "rozsuvna", "bez"],
+      "fasady_if_wide":        { "condition": "shyryna > 2770", "allowed": ["rozsuvna", "bez"] }
+    },
+
+    "navisna": {
+      "section_options":       false,
+      "option_bezdna":         false,
+      "option_nisha":          false,
+      "section_zadnia_stinka": true,
+      "show_hlybyna":          true,
+      "section_baza_tsokol_opory": false,
+      "section_krysha":        true,
+      "fasady_allowed":        ["nakladnyi", "vnutrishnii", "bez"]
+    },
+
+    "stil": {
+      "section_options":       false,
+      "option_bezdna":         false,
+      "option_nisha":          false,
+      "section_zadnia_stinka": false,
+      "show_hlybyna":          true,
+      "section_baza_tsokol_opory": false,
+      "section_krysha":        false,
+      "fasady_allowed":        ["nakladnyi", "vnutrishnii", "bez"]
+    },
+
+    "bez": {
+      "section_options":       false,
+      "option_bezdna":         false,
+      "option_nisha":          false,
+      "section_zadnia_stinka": false,
+      "show_hlybyna":          false,
+      "section_baza_tsokol_opory": false,
+      "section_krysha":        false,
+      "fasady_allowed":        ["rozsuvna", "okremyi"]
+    }
+  },
+
+  "fasad_rules": {
+    "_comment": "Обмеження доступності фасадів за розмірами. Застосовується тільки для шафи.",
+
+    "rozsuvna": {
+      "disable_if": "vysota < 300 OR shyryna < 600"
+    },
+    "fasad_limits_override": {
+      "_comment": "Ліміти розмірів з FASAD_LIMITS діють ТІЛЬКИ якщо corpus = bez. В інших корпусах пріоритет у лімітів корпусу.",
+      "applies_to": ["bez"]
+    }
+  },
+
+  "baza_rules": {
+    "_comment": "Блок Бази. Активний тільки для шафи з шириною <= 2770 мм.",
+    "show_if": "corpus = shafa AND shyryna <= 2770",
+
+    "options": {
+      "stijky_na_pidlohu": { "always_available": true },
+      "stijky_na_dno":     { "fade_if": "option_bezdna = true" },
+      "komb_liva":         { "fade_if": "option_bezdna = true" },
+      "komb_prava":        { "fade_if": "option_bezdna = true" }
+    }
+  },
+
+  "tsokol_rules": {
+    "_comment": "Блок Цоколь. Активний разом з блоком Бази.",
+    "show_if": "corpus = shafa AND shyryna <= 2770",
+
+    "options": {
+      "vysota_tsokolu": {
+        "type": "input_number",
+        "min": 50, "max": 100, "default": 70,
+        "show_if": "tsokol = vysota"
+      },
+      "bez_tsokolu": {
+        "always_available": true,
+        "force_active_if": "option_bezdna = true"
+      }
+    },
+
+    "sub_options": {
+      "vyriz_plintus": {
+        "type": "toggle + input_number",
+        "min": 16, "max": 30, "default": 16,
+        "show_if": "tsokol = vysota AND baza != stijky_na_dno",
+        "reset_on_hide": true
+      },
+      "vidstyp_bokakh": {
+        "type": "input_number",
+        "min": 10, "max": 30, "default": 10,
+        "show_if": "tsokol = vysota AND (baza = stijky_na_dno OR baza = komb_liva OR baza = komb_prava)"
+      }
+    }
+  },
+
+  "opory_rules": {
+    "_comment": "Блок Опори. Ховається якщо цоколь з висотою або база комбінована.",
+    "hide_if": "tsokol = vysota OR baza = komb_liva OR baza = komb_prava",
+
+    "options": {
+      "m6":        { "fade_if": "baza = stijky_na_dno" },
+      "record":    { "fade_if": "baza = stijky_na_dno" },
+      "27mm":      { "fade_if": "baza = stijky_na_pidlohu OR baza = komb_liva OR baza = komb_prava OR tsokol = vysota" },
+      "integrato": { "fade_if": "baza = stijky_na_pidlohu OR baza = komb_liva OR baza = komb_prava OR tsokol = vysota" },
+      "bez_opor":  { "always_available": true }
+    }
+  },
+
+  "krysha_rules": {
+    "_comment": "Блок Криша.",
+    "show_if": "corpus = shafa OR corpus = navisna",
+
+    "options": {
+      "vkladna": {
+        "always_available": true,
+        "force_active_if": "option_nisha = true",
+        "fade_if": "option_nisha = true"
+      },
+      "nakladna": { "always_available": true }
+    },
+
+    "sub_options": {
+      "navisannia_nad_fasadom": {
+        "type": "toggle",
+        "show_if": "krysha = nakladna AND fasad = nakladnyi AND (corpus = shafa OR corpus = navisna)",
+        "reset_on_hide": true
+      }
+    }
+  },
+
+  "zadnia_stinka_options": {
+    "dvp_v_paz":   { "label": "ДВП в паз",         "default": true },
+    "dvp_v_chvert":{ "label": "ДВП в чверть" },
+    "dvp_nabyvna": { "label": "ДВП набивна" },
+    "dsp":         { "label": "ДСП" },
+    "bez":         { "label": "Без задньої стінки" }
+  }
+}
