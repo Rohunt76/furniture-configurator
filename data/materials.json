@@ -1,6 +1,6 @@
 {
   "_comment": "Каталог матеріалів. Поля nayvnist, price_site, aktsia, chystyy_rozmir оновлюються автоматично через GitHub Actions.",
-  "_updated": "2026-04-21T11:22:39Z",
+  "_updated": "2026-04-22T07:39:31Z",
   "materials": [
     {
       "id": 48501,
@@ -1191,7 +1191,7 @@
       "koef_chyst": 4.4587,
       "price_m2": 613.370713,
       "aktsia": true,
-      "nayvnist": false,
+      "nayvnist": true,
       "g1": 152428,
       "g2": 152438,
       "g3": 152474,
