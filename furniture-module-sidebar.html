@@ -26,22 +26,69 @@
     box-shadow: 0 2px 16px rgba(0,0,0,0.07);
   }
   .sidebar-header {
-    padding: 22px 22px 18px;
+    padding: 20px 22px 16px;
     border-bottom: 1px solid #eeece6;
   }
   .sidebar-title {
-    font-size: 11px;
-    font-weight: 600;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 4px;
-  }
-  .sidebar-step {
     font-size: 20px;
     font-weight: 600;
     color: #1a1a18;
   }
+
+  /* Accordion section */
+  .acc-section {
+    border-bottom: 1px solid #eeece6;
+  }
+  .acc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 22px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .acc-header:hover { background: #faf9f6; }
+  .acc-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+  .acc-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #bbb;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    flex-shrink: 0;
+  }
+  .acc-value {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+  .acc-chip {
+    font-size: 12px;
+    font-weight: 500;
+    color: #2c2c2a;
+    background: #eae8e2;
+    border-radius: 5px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  .acc-chip.toggle-on {
+    background: #2c2c2a;
+    color: #f1efe8;
+  }
+  .acc-arrow {
+    font-size: 10px;
+    color: #ccc;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+  .acc-section.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body { display: none; padding: 4px 22px 16px; }
+  .acc-section.open .acc-body { display: block; }
+
+  /* Always-open section (dimensions) */
   .section {
     padding: 16px 22px;
     border-bottom: 1px solid #eeece6;
@@ -52,8 +99,9 @@
     color: #bbb;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
+
   .chip-group { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip {
     padding: 7px 13px;
@@ -103,7 +151,6 @@
   .dim-item { display: flex; flex-direction: column; gap: 6px; }
   .dim-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .dim-name { font-size: 13px; color: #333; flex-shrink: 0; }
-
   .dim-input-wrap {
     display: flex;
     align-items: center;
@@ -116,7 +163,6 @@
   }
   .dim-input-wrap:focus-within { border-color: #888; background: #fff; }
   .dim-item.has-error .dim-input-wrap { border-color: #e05a5a; background: #fff8f8; }
-
   .dim-input {
     width: 54px;
     border: none;
@@ -131,7 +177,6 @@
   .dim-input::-webkit-outer-spin-button,
   .dim-input::-webkit-inner-spin-button { -webkit-appearance: none; }
   .dim-unit { font-size: 11px; color: #999; }
-
   input[type=range] {
     width: 100%;
     height: 4px;
@@ -139,20 +184,13 @@
     accent-color: #2c2c2a;
     cursor: pointer;
   }
-  .dim-bounds {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: #bbb;
-  }
-  .dim-error {
-    font-size: 11px;
-    color: #e05a5a;
-    display: none;
-    margin-top: 1px;
-  }
+  .dim-bounds { display: flex; justify-content: space-between; font-size: 10px; color: #bbb; }
+  .dim-error { font-size: 11px; color: #e05a5a; display: none; margin-top: 1px; }
   .dim-item.has-error .dim-error { display: block; }
 
+  .hidden { display: none !important; }
+
+  /* Material circles */
   .mat-item {
     display: flex;
     flex-direction: column;
@@ -162,15 +200,22 @@
     position: relative;
   }
   .mat-circle {
-    width: 80px;
-    height: 80px;
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
-    overflow: hidden;
+    overflow: visible;
     border: 2px solid transparent;
     transition: border-color 0.15s, transform 0.15s;
     background: #e8e6e0;
+    position: relative;
   }
-  .mat-circle img { width:100%; height:100%; object-fit:cover; }
+  .mat-circle-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .mat-circle-inner img { width:100%; height:100%; object-fit:cover; }
   .mat-item:hover .mat-circle { border-color: #2c2c2a; transform: scale(1.06); }
   .mat-item.selected .mat-circle { border-color: #2c2c2a; box-shadow: 0 0 0 3px rgba(44,44,42,0.15); }
   .mat-tooltip {
@@ -186,7 +231,7 @@
     border-radius: 6px;
     pointer-events: none;
     z-index: 100;
-    max-width: 160px;
+    width: 140px;
     white-space: normal;
     text-align: center;
     line-height: 1.3;
@@ -194,7 +239,7 @@
   .mat-item:hover .mat-tooltip { display: block; }
 
   .sidebar-footer {
-    padding: 18px 22px;
+    padding: 16px 22px;
     background: #faf9f6;
     border-top: 1px solid #eeece6;
   }
@@ -215,50 +260,65 @@
 </style>
 </head>
 <body>
-
 <div class="sidebar">
+
   <div class="sidebar-header">
-    <p class="sidebar-title">Крок 1 з 2</p>
-    <p class="sidebar-step">Базовий модуль</p>
+    <p class="sidebar-title">Базовий модуль</p>
   </div>
 
-  <div class="section">
-    <p class="section-label">Корпус</p>
-    <div class="chip-group" id="corpus-group">
-      <div class="chip active" data-val="shafa">Шафа</div>
-      <div class="chip" data-val="navisna">Навісна</div>
-      <div class="chip" data-val="stil">Стіл</div>
-      <div class="chip" data-val="bez">Без корпусу</div>
+  <!-- КОРПУС -->
+  <div class="acc-section open" id="acc-corpus">
+    <div class="acc-header" onclick="toggleAcc('acc-corpus')">
+      <div class="acc-left">
+        <span class="acc-label">Корпус</span>
+        <div class="acc-value" id="val-corpus"><span class="acc-chip">Шафа</span></div>
+      </div>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
+      <div class="chip-group" id="corpus-group">
+        <div class="chip active" data-val="shafa">Шафа</div>
+        <div class="chip" data-val="navisna">Навісна</div>
+        <div class="chip" data-val="stil">Стіл</div>
+        <div class="chip" data-val="bez">Без корпусу</div>
+      </div>
+      <div id="corpus-options-wrap" style="margin-top:12px; display:flex; flex-direction:column;">
+        <div class="toggle-row" id="row-bezdna">
+          <span class="toggle-label">Без дна</span>
+          <div class="toggle" id="tog-bezdna"><div class="toggle-thumb"></div></div>
+        </div>
+        <div class="toggle-row" id="row-nisha">
+          <span class="toggle-label">У нішу до стелі</span>
+          <div class="toggle" id="tog-nisha"><div class="toggle-thumb"></div></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="section" id="section-options">
-    <p class="section-label">Опції корпусу</p>
-    <div class="toggle-row" id="row-bezdna">
-      <span class="toggle-label">Без дна</span>
-      <div class="toggle" id="tog-bezdna"><div class="toggle-thumb"></div></div>
+  <!-- ФАСАД -->
+  <div class="acc-section" id="acc-fasad">
+    <div class="acc-header" onclick="toggleAcc('acc-fasad')">
+      <div class="acc-left">
+        <span class="acc-label">Фасад</span>
+        <div class="acc-value" id="val-fasad"><span class="acc-chip">Накладний</span></div>
+      </div>
+      <span class="acc-arrow">▼</span>
     </div>
-    <div class="toggle-row" id="row-nisha">
-      <span class="toggle-label">У нішу до стелі</span>
-      <div class="toggle" id="tog-nisha"><div class="toggle-thumb"></div></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <p class="section-label">Фасад</p>
-    <div class="chip-group" id="fasad-group">
-      <div class="chip active" data-val="nakladnyi">Накладний</div>
-      <div class="chip" data-val="vnutrishnii">Внутрішній</div>
-      <div class="chip" data-val="rozsuvna">Розсувна система</div>
-      <div class="chip" data-val="okremyi">Окремий фасад</div>
-      <div class="chip" data-val="bez">Без фасадів</div>
+    <div class="acc-body">
+      <div class="chip-group" id="fasad-group">
+        <div class="chip active" data-val="nakladnyi">Накладний</div>
+        <div class="chip" data-val="vnutrishnii">Внутрішній</div>
+        <div class="chip" data-val="rozsuvna">Розсувна система</div>
+        <div class="chip" data-val="okremyi">Окремий фасад</div>
+        <div class="chip" data-val="bez">Без фасадів</div>
+      </div>
     </div>
   </div>
 
+  <!-- РОЗМІРИ — ніколи не згортається -->
   <div class="section">
     <p class="section-label">Розміри виробу</p>
     <div class="dim-row">
-
       <div class="dim-item" id="dim-vysota">
         <div class="dim-top">
           <span class="dim-name">Висота</span>
@@ -268,13 +328,9 @@
           </div>
         </div>
         <input type="range" id="rng-vysota" min="200" max="2770" step="10" value="2400">
-        <div class="dim-bounds">
-          <span id="min-vysota">200 мм</span>
-          <span id="max-vysota">2770 мм</span>
-        </div>
+        <div class="dim-bounds"><span id="min-vysota">200 мм</span><span id="max-vysota">2770 мм</span></div>
         <span class="dim-error" id="err-vysota"></span>
       </div>
-
       <div class="dim-item" id="dim-shyryna">
         <div class="dim-top">
           <span class="dim-name">Ширина</span>
@@ -284,13 +340,9 @@
           </div>
         </div>
         <input type="range" id="rng-shyryna" min="200" max="5036" step="10" value="1000">
-        <div class="dim-bounds">
-          <span id="min-shyryna">200 мм</span>
-          <span id="max-shyryna">5036 мм</span>
-        </div>
+        <div class="dim-bounds"><span id="min-shyryna">200 мм</span><span id="max-shyryna">5036 мм</span></div>
         <span class="dim-error" id="err-shyryna"></span>
       </div>
-
       <div class="dim-item" id="dim-hlybyna">
         <div class="dim-top">
           <span class="dim-name">Глибина</span>
@@ -300,118 +352,161 @@
           </div>
         </div>
         <input type="range" id="rng-hlybyna" min="150" max="900" step="10" value="560">
-        <div class="dim-bounds">
-          <span id="min-hlybyna">150 мм</span>
-          <span id="max-hlybyna">900 мм</span>
-        </div>
+        <div class="dim-bounds"><span id="min-hlybyna">150 мм</span><span id="max-hlybyna">900 мм</span></div>
         <span class="dim-error" id="err-hlybyna"></span>
       </div>
-
     </div>
   </div>
 
-  <div class="section" id="section-zadnia">
-    <p class="section-label">Задня стінка</p>
-    <div class="chip-group" id="zadnia-group">
-      <div class="chip active" data-val="paz">ДВП в паз</div>
-      <div class="chip" data-val="chvert">ДВП в чверть</div>
-      <div class="chip" data-val="nabyv">ДВП набивна</div>
-      <div class="chip" data-val="dsp">ДСП</div>
-      <div class="chip" data-val="bez">Без задньої стінки</div>
+  <!-- ЗАДНЯ СТІНКА -->
+  <div class="acc-section" id="acc-zadnia" style="display:none">
+    <div class="acc-header" onclick="toggleAcc('acc-zadnia')">
+      <div class="acc-left">
+        <span class="acc-label">Задня стінка</span>
+        <div class="acc-value" id="val-zadnia"><span class="acc-chip">ДВП в паз</span></div>
+      </div>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
+      <div class="chip-group" id="zadnia-group">
+        <div class="chip active" data-val="paz">ДВП в паз</div>
+        <div class="chip" data-val="chvert">ДВП в чверть</div>
+        <div class="chip" data-val="nabyv">ДВП набивна</div>
+        <div class="chip" data-val="dsp">ДСП</div>
+        <div class="chip" data-val="bez">Без задньої стінки</div>
+      </div>
     </div>
   </div>
 
-  <div class="section" id="section-baza" style="display:none">
-    <p class="section-label">База</p>
-    <div class="chip-group" id="baza-group">
-      <div class="chip active" data-val="pidlohu">Стійки на підлогу</div>
-      <div class="chip" id="baza-dno" data-val="dno">Стійки на дно</div>
-      <div class="chip" id="baza-komb-l" data-val="komb-l">Комбінована ліва з цоколем</div>
-      <div class="chip" id="baza-komb-r" data-val="komb-r">Комбінована права з цоколем</div>
+  <!-- БАЗА -->
+  <div class="acc-section" id="section-baza" style="display:none">
+    <div class="acc-header" onclick="toggleAcc('section-baza')">
+      <div class="acc-left">
+        <span class="acc-label">База</span>
+        <div class="acc-value" id="val-baza"><span class="acc-chip">Стійки на підлогу</span></div>
+      </div>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
+      <div class="chip-group" id="baza-group">
+        <div class="chip active" data-val="pidlohu">Стійки на підлогу</div>
+        <div class="chip" id="baza-dno" data-val="dno">Стійки на дно</div>
+        <div class="chip" id="baza-komb-l" data-val="komb-l">Комбінована ліва з цоколем</div>
+        <div class="chip" id="baza-komb-r" data-val="komb-r">Комбінована права з цоколем</div>
+      </div>
     </div>
   </div>
 
-  <div class="section" id="section-tsokol" style="display:none">
-    <p class="section-label">Цоколь</p>
-    <div style="display:flex; flex-direction:column; gap:12px;">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <div class="chip-group" style="flex:1;">
-          <div class="chip active" id="tsokol-z-vysotoyu" data-val="vysota">Висота цоколю</div>
-          <div class="chip" id="tsokol-bez" data-val="bez">Без цоколю</div>
+  <!-- ЦОКОЛЬ -->
+  <div class="acc-section" id="section-tsokol" style="display:none">
+    <div class="acc-header" onclick="toggleAcc('section-tsokol')">
+      <div class="acc-left">
+        <span class="acc-label">Цоколь</span>
+        <div class="acc-value" id="val-tsokol"><span class="acc-chip">Висота · 70 мм</span></div>
+      </div>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="chip-group" style="flex:1;">
+            <div class="chip active" id="tsokol-z-vysotoyu" data-val="vysota">Висота цоколю</div>
+            <div class="chip" id="tsokol-bez" data-val="bez">Без цоколю</div>
+          </div>
+          <div class="dim-input-wrap" id="tsokol-input-wrap">
+            <input class="dim-input" type="number" id="inp-tsokol" value="70" min="50" max="100" step="5" style="width:48px;">
+            <span class="dim-unit">мм</span>
+          </div>
         </div>
-        <div class="dim-input-wrap" id="tsokol-input-wrap">
-          <input class="dim-input" type="number" id="inp-tsokol" value="70" min="50" max="100" step="5" style="width:48px;">
-          <span class="dim-unit">мм</span>
+        <div id="row-plintus" style="display:none; align-items:center; gap:8px;">
+          <div class="toggle" id="tog-plintus"><div class="toggle-thumb"></div></div>
+          <span style="flex:1; font-size:13px; color:#333;">Виріз під плінтус, глибина</span>
+          <div class="dim-input-wrap" id="plintus-input-wrap" style="display:none;">
+            <input class="dim-input" type="number" id="inp-plintus" value="16" min="16" max="30" step="1" style="width:48px;">
+            <span class="dim-unit">мм</span>
+          </div>
         </div>
-      </div>
-      <div id="row-plintus" style="display:none; align-items:center; gap:8px;">
-        <div class="toggle" id="tog-plintus"><div class="toggle-thumb"></div></div>
-        <span style="flex:1; font-size:13px; color:#333;">Виріз під плінтус, глибина</span>
-        <div class="dim-input-wrap" id="plintus-input-wrap" style="display:none;">
-          <input class="dim-input" type="number" id="inp-plintus" value="16" min="16" max="30" step="1" style="width:48px;">
-          <span class="dim-unit">мм</span>
-        </div>
-      </div>
-      <div id="row-vidstyp" style="display:none; align-items:center; gap:8px;">
-        <span style="flex:1; font-size:13px; color:#333;">Відступ по боках</span>
-        <div class="dim-input-wrap">
-          <input class="dim-input" type="number" id="inp-vidstyp" value="10" min="10" max="30" step="1" style="width:48px;">
-          <span class="dim-unit">мм</span>
+        <div id="row-vidstyp" style="display:none; align-items:center; gap:8px;">
+          <span style="flex:1; font-size:13px; color:#333;">Відступ по боках</span>
+          <div class="dim-input-wrap">
+            <input class="dim-input" type="number" id="inp-vidstyp" value="10" min="10" max="30" step="1" style="width:48px;">
+            <span class="dim-unit">мм</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="section" id="section-opory" style="display:none">
-    <p class="section-label">Опори</p>
-    <div class="chip-group" id="opory-group">
-      <div class="chip active" data-val="m6">М6</div>
-      <div class="chip" data-val="record">Record</div>
-      <div class="chip" id="opora-27" data-val="27mm">27 мм</div>
-      <div class="chip" id="opora-int" data-val="integrato">INTEGRATO</div>
-      <div class="chip" data-val="bez">Без опор</div>
-    </div>
-  </div>
-
-  <div class="section" id="section-krysha" style="display:none">
-    <p class="section-label">Криша</p>
-    <div style="display:flex; flex-direction:column; gap:12px;">
-      <div class="chip-group" id="krysha-group">
-        <div class="chip" id="krysha-vkladna" data-val="vkladna">Вкладна</div>
-        <div class="chip active" id="krysha-nakladna" data-val="nakladna">Накладна</div>
+  <!-- ОПОРИ -->
+  <div class="acc-section" id="section-opory" style="display:none">
+    <div class="acc-header" onclick="toggleAcc('section-opory')">
+      <div class="acc-left">
+        <span class="acc-label">Опори</span>
+        <div class="acc-value" id="val-opory"><span class="acc-chip">М6</span></div>
       </div>
-      <div id="row-navisannia" style="display:none; align-items:center; gap:8px;">
-        <div class="toggle" id="tog-navisannia"><div class="toggle-thumb"></div></div>
-        <span style="flex:1; font-size:13px; color:#333;">Нависання над фасадом</span>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
+      <div class="chip-group" id="opory-group">
+        <div class="chip active" data-val="m6">М6</div>
+        <div class="chip" data-val="record">Record</div>
+        <div class="chip" id="opora-27" data-val="27mm">27 мм</div>
+        <div class="chip" id="opora-int" data-val="integrato">INTEGRATO</div>
+        <div class="chip" data-val="bez">Без опор</div>
       </div>
     </div>
   </div>
 
-  <div class="section">
-    <div style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="toggleMaterialAccordion()">
-      <p class="section-label" style="margin-bottom:0;">Матеріал корпусу</p>
-      <span id="mat-accordion-arrow" style="font-size:11px; color:#aaa; transition:transform 0.2s;">▼</span>
-    </div>
-
-    <div id="mat-selected-preview" style="display:none; align-items:center; gap:10px; margin-top:10px;">
-      <div style="width:36px; height:36px; border-radius:50%; overflow:hidden; border:1px solid #ddd; flex-shrink:0; background:#e8e6e0;">
-        <img id="mat-sel-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;">
+  <!-- КРИША -->
+  <div class="acc-section" id="section-krysha" style="display:none">
+    <div class="acc-header" onclick="toggleAcc('section-krysha')">
+      <div class="acc-left">
+        <span class="acc-label">Криша</span>
+        <div class="acc-value" id="val-krysha"><span class="acc-chip">Вкладна</span></div>
       </div>
-      <span id="mat-sel-name" style="font-size:12px; color:#555; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></span>
+      <span class="acc-arrow">▼</span>
     </div>
+    <div class="acc-body">
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="chip-group" id="krysha-group">
+          <div class="chip active" id="krysha-vkladna" data-val="vkladna">Вкладна</div>
+          <div class="chip" id="krysha-nakladna" data-val="nakladna">Накладна</div>
+        </div>
+        <div id="row-navisannia" style="display:none; align-items:center; gap:8px;">
+          <div class="toggle" id="tog-navisannia"><div class="toggle-thumb"></div></div>
+          <span style="flex:1; font-size:13px; color:#333;">Нависання над фасадом</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <div id="mat-accordion" style="display:none; margin-top:12px;">
+  <!-- МАТЕРІАЛ КОРПУСУ -->
+  <div class="acc-section" id="acc-material">
+    <div class="acc-header" onclick="toggleAcc('acc-material', true)">
+      <div class="acc-left">
+        <span class="acc-label">Матеріал</span>
+        <div id="mat-header-preview" style="display:none; align-items:center; gap:6px;">
+          <div style="width:20px; height:20px; border-radius:50%; overflow:hidden; flex-shrink:0; background:#e8e6e0;">
+            <img id="mat-header-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;">
+          </div>
+          <span id="mat-header-name" class="acc-chip"></span>
+        </div>
+        <span id="mat-header-empty" style="font-size:11px;color:#bbb;">Не обрано</span>
+      </div>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">
       <input type="text" id="mat-search" placeholder="Пошук матеріалу..." oninput="filterMaterials()" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:13px; outline:none; background:#faf9f6; margin-bottom:12px;">
-      <div style="max-height:320px; overflow-y:auto; overflow-x:hidden;">
-        <div id="mat-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:4px;"></div>
+      <div style="max-height:320px; overflow-y:auto; overflow-x:hidden; padding:2px;">
+        <div id="mat-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;"></div>
       </div>
-      <div id="mat-empty" style="display:none; text-align:center; font-size:13px; color:#aaa; padding:24px 0;">Нічого не знайдено</div>
-      <div id="mat-loading" style="text-align:center; font-size:13px; color:#aaa; padding:24px 0;">Завантаження...</div>
+      <div id="mat-empty" style="display:none; text-align:center; font-size:13px; color:#aaa; padding:20px 0;">Нічого не знайдено</div>
+      <div id="mat-loading" style="text-align:center; font-size:13px; color:#aaa; padding:20px 0;">Завантаження...</div>
     </div>
   </div>
 
   <div class="sidebar-footer">
-    <button class="btn-primary" id="btn-next">
+    <button class="btn-primary" id="btn-next" onclick="alert('Базовий модуль налаштовано!')">
       Перейти до наповнення →
     </button>
   </div>
@@ -422,84 +517,63 @@
     shafa:   { h:[200,2770,2400], w:[200,5036,1000], d:[150,900,560],   fasad:['nakladnyi','vnutrishnii','rozsuvna','bez'], zadnia:true,  hlybyna:true,  bezdna:true,  nisha:true  },
     navisna: { h:[140,1500,500],  w:[200,2770,500],  d:[150,600,350],   fasad:['nakladnyi','vnutrishnii','bez'],            zadnia:true,  hlybyna:true,  bezdna:false, nisha:false },
     stil:    { h:[350,1500,750],  w:[300,2770,1300], d:[200,1000,500],  fasad:['nakladnyi','vnutrishnii','bez'],            zadnia:false, hlybyna:true,  bezdna:false, nisha:false },
-    bez:     { h:[300,3500,2400], w:[600,5000,1600], d:[null,null,null],fasad:['rozsuvna','okremyi'],                       zadnia:false, hlybyna:false, bezdna:false, nisha:false }
+    bez:     { h:[300,3500,2400], w:[600,5000,1600], d:[null,null,null], fasad:['rozsuvna','okremyi'],                      zadnia:false, hlybyna:false, bezdna:false, nisha:false }
   };
-
   const FASAD_LIMITS = {
     rozsuvna: { h:[300,3500,2400], w:[600,5000,1600] },
     okremyi:  { h:[70,2770,2400],  w:[70,700,500]    }
   };
+  const CORPUS_LABELS = { shafa:'Шафа', navisna:'Навісна', stil:'Стіл', bez:'Без корпусу' };
+  const FASAD_LABELS  = { nakladnyi:'Накладний', vnutrishnii:'Внутрішній', rozsuvna:'Розсувна система', okremyi:'Окремий фасад', bez:'Без фасадів' };
 
   let currentCorpus = 'shafa';
-  let currentFasad = 'nakladnyi';
-  let errors = { vysota: false, shyryna: false, hlybyna: false };
+  let currentFasad  = 'nakladnyi';
+  let errors = { vysota:false, shyryna:false, hlybyna:false };
 
+  /* ── Accordion ── */
+  function toggleAcc(id, loadMat) {
+    const sec = document.getElementById(id);
+    const isOpen = sec.classList.contains('open');
+    sec.classList.toggle('open', !isOpen);
+    if (!isOpen && loadMat && !materialsLoaded) loadMaterials();
+  }
+
+  function collapseAcc(id) { document.getElementById(id).classList.remove('open'); }
+  function openAcc(id)     { document.getElementById(id).classList.add('open'); }
+
+  /* ── Summary values ── */
+  function setVal(id, text) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = `<span class="acc-chip">${text}</span>`;
+  }
+
+  function updateOptionsVal() {
+    const bezdna = document.getElementById('tog-bezdna').classList.contains('on');
+    const nisha  = document.getElementById('tog-nisha').classList.contains('on');
+    const el = document.getElementById('val-corpus');
+    if (!el) return;
+    const corpusLabel = CORPUS_LABELS[currentCorpus] || currentCorpus;
+    let html = `<span class="acc-chip">${corpusLabel}</span>`;
+    if (bezdna) html += `<span class="acc-chip toggle-on">Без дна</span>`;
+    if (nisha)  html += `<span class="acc-chip toggle-on">У нішу до стелі</span>`;
+    el.innerHTML = html;
+    if (bezdna || nisha) openAcc('acc-corpus');
+  }
+
+  /* ── Limits ── */
   function getEffectiveLimits() {
     const base = LIMITS[currentCorpus];
-    if (currentCorpus !== 'bez') return base;
+    if (currentCorpus !== 'bez') {
+      if (currentCorpus === 'shafa' && (currentFasad === 'nakladnyi' || currentFasad === 'vnutrishnii')) {
+        return { h: base.h, w: [base.w[0], 2770, Math.min(base.w[2], 2770)], d: base.d };
+      }
+      return base;
+    }
     const fl = FASAD_LIMITS[currentFasad];
-    if (!fl) return base;
-    return { h: fl.h, w: fl.w, d: base.d };
+    return fl ? { h:fl.h, w:fl.w, d:base.d } : base;
   }
-
-  function getCurrentWidth() {
-    return parseInt(document.getElementById('inp-shyryna').value) || 0;
-  }
-
-  function updateRozsuvnaAvailability() {
-    if (currentCorpus !== 'shafa') return;
-    const h = parseInt(document.getElementById('inp-vysota').value) || 0;
-    const w = parseInt(document.getElementById('inp-shyryna').value) || 0;
-    const rozsuvna = document.querySelector('#fasad-group .chip[data-val="rozsuvna"]');
-    const disable = h < 300 || w < 600;
-    rozsuvna.classList.toggle('fade', disable);
-    if (disable && rozsuvna.classList.contains('active')) {
-      rozsuvna.classList.remove('active');
-      const first = document.querySelector('#fasad-group .chip:not(.fade)');
-      if (first) { first.classList.add('active'); currentFasad = first.dataset.val; }
-    }
-  }
-
-  function updateFasadByWidth() {
-    if (currentCorpus !== 'shafa') return;
-    const w = getCurrentWidth();
-    const wideMode = w > 2770;
-    const allowedWide = ['rozsuvna', 'bez'];
-    const r = LIMITS['shafa'];
-    document.querySelectorAll('#fasad-group .chip').forEach(c => {
-      const ok = wideMode ? allowedWide.includes(c.dataset.val) : r.fasad.includes(c.dataset.val);
-      c.classList.toggle('fade', !ok);
-      if (!ok && c.classList.contains('active')) {
-        c.classList.remove('active');
-        const first = document.querySelector('#fasad-group .chip:not(.fade)');
-        if (first) { first.classList.add('active'); currentFasad = first.dataset.val; }
-      }
-    });
-
-    // У нішу до стелі — ховаємо при ширині > 2770
-    const rowNisha = document.getElementById('row-nisha');
-    if (wideMode) {
-      rowNisha.classList.add('hidden');
-      const togNisha = document.getElementById('tog-nisha');
-      if (togNisha.classList.contains('on')) {
-        togNisha.classList.remove('on');
-        updateBazaTsokolOpory();
-      }
-    } else {
-      rowNisha.classList.remove('hidden');
-    }
-
-    // Вкладна криша — недоступна при ширині > 2770
-    const vkladna = document.getElementById('krysha-vkladna');
-    if (vkladna) {
-      vkladna.classList.toggle('fade', wideMode);
-      if (wideMode && vkladna.classList.contains('active')) {
-        vkladna.classList.remove('active');
-        document.getElementById('krysha-nakladna').classList.add('active');
-        updateKryshaOptions();
-      }
-    }
-  }
+  function getCurrentWidth() { return parseInt(document.getElementById('inp-shyryna').value) || 0; }
 
   const DIMS = [
     { key:'vysota',  lk:'h', inp:'inp-vysota',  rng:'rng-vysota',  minEl:'min-vysota',  maxEl:'max-vysota',  err:'err-vysota',  item:'dim-vysota'  },
@@ -520,24 +594,20 @@
       document.getElementById(d.maxEl).textContent = lim[1] + ' мм';
       clearErr(d.key, d.item, d.err);
     });
-    errors = { vysota: false, shyryna: false, hlybyna: false };
+    errors = { vysota:false, shyryna:false, hlybyna:false };
     updateBtn();
   }
 
   function setErr(key, itemId, errId, min, max) {
     document.getElementById(itemId).classList.add('has-error');
     document.getElementById(errId).textContent = 'Допустимий діапазон: ' + min + '–' + max + ' мм';
-    errors[key] = true;
-    updateBtn();
+    errors[key] = true; updateBtn();
   }
-
   function clearErr(key, itemId, errId) {
     document.getElementById(itemId).classList.remove('has-error');
     document.getElementById(errId).textContent = '';
-    errors[key] = false;
-    updateBtn();
+    errors[key] = false; updateBtn();
   }
-
   function updateBtn() {
     document.getElementById('btn-next').disabled = Object.values(errors).some(Boolean);
   }
@@ -545,40 +615,30 @@
   DIMS.forEach(d => {
     const inp = document.getElementById(d.inp);
     const rng = document.getElementById(d.rng);
-
-    rng.addEventListener('input', () => {
-      inp.value = rng.value;
-      clearErr(d.key, d.item, d.err);
-    });
-
+    rng.addEventListener('input', () => { inp.value = rng.value; clearErr(d.key, d.item, d.err); });
     inp.addEventListener('input', () => {
       const L = getEffectiveLimits()[d.lk];
       if (!L || L[0] == null) return;
       const val = parseInt(inp.value);
-      if (!isNaN(val) && val >= L[0] && val <= L[1]) {
-        rng.value = val;
-        clearErr(d.key, d.item, d.err);
-      } else if (inp.value !== '' && inp.value !== '-') {
-        setErr(d.key, d.item, d.err, L[0], L[1]);
-      }
+      if (!isNaN(val) && val >= L[0] && val <= L[1]) { rng.value = val; clearErr(d.key, d.item, d.err); }
+      else if (inp.value !== '') setErr(d.key, d.item, d.err, L[0], L[1]);
     });
-
     inp.addEventListener('blur', () => {
       const L = getEffectiveLimits()[d.lk];
       if (!L || L[0] == null) return;
       const val = parseInt(inp.value);
-      if (isNaN(val) || val < L[0] || val > L[1]) {
-        setErr(d.key, d.item, d.err, L[0], L[1]);
-      }
+      if (isNaN(val) || val < L[0] || val > L[1]) setErr(d.key, d.item, d.err, L[0], L[1]);
     });
   });
 
+  /* ── Corpus rules ── */
   function applyCorpusRules(corpus) {
     const r = LIMITS[corpus];
     document.getElementById('row-bezdna').classList.toggle('hidden', !r.bezdna);
     document.getElementById('row-nisha').classList.toggle('hidden', !r.nisha);
-    document.getElementById('section-options').classList.toggle('hidden', !r.bezdna && !r.nisha);
-    document.getElementById('section-zadnia').classList.toggle('hidden', !r.zadnia);
+    const optWrap = document.getElementById('corpus-options-wrap');
+    if (optWrap) optWrap.style.display = (r.bezdna || r.nisha) ? '' : 'none';
+    document.getElementById('acc-zadnia').style.display = r.zadnia ? '' : 'none';
     document.getElementById('dim-hlybyna').classList.toggle('hidden', !r.hlybyna);
 
     let activeFound = false;
@@ -592,9 +652,9 @@
       const first = document.querySelector('#fasad-group .chip:not(.fade)');
       if (first) first.classList.add('active');
     }
-
     const activeChip = document.querySelector('#fasad-group .chip.active');
     currentFasad = activeChip ? activeChip.dataset.val : 'nakladnyi';
+    setVal('val-fasad', FASAD_LABELS[currentFasad] || currentFasad);
 
     applyLimits();
     updateFasadByWidth();
@@ -602,44 +662,62 @@
     updateBazaTsokolOpory();
   }
 
-  document.querySelectorAll('#corpus-group .chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('#corpus-group .chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      currentCorpus = chip.dataset.val;
-      applyCorpusRules(currentCorpus);
-    });
-  });
-
-  document.querySelectorAll('#fasad-group .chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      if (chip.classList.contains('fade')) return;
-      document.querySelectorAll('#fasad-group .chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      currentFasad = chip.dataset.val;
-      applyLimits();
-      updateKryshaOptions();
-    });
-  });
-
-  document.querySelectorAll('#zadnia-group .chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('#zadnia-group .chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-    });
-  });
-
-  function isBezdnaOn() {
-    return document.getElementById('tog-bezdna').classList.contains('on');
+  function updateRozsuvnaAvailability() {
+    if (currentCorpus !== 'shafa') return;
+    const h = parseInt(document.getElementById('inp-vysota').value) || 0;
+    const w = getCurrentWidth();
+    const rozsuvna = document.querySelector('#fasad-group .chip[data-val="rozsuvna"]');
+    const disable = h < 300 || w < 600;
+    rozsuvna.classList.toggle('fade', disable);
+    if (disable && rozsuvna.classList.contains('active')) {
+      rozsuvna.classList.remove('active');
+      const first = document.querySelector('#fasad-group .chip:not(.fade)');
+      if (first) { first.classList.add('active'); currentFasad = first.dataset.val; }
+    }
   }
+
+  function updateFasadByWidth() {
+    if (currentCorpus !== 'shafa') return;
+    const w = getCurrentWidth();
+    const wideMode = w > 2770;
+    const allowedWide = ['rozsuvna','bez'];
+    const r = LIMITS['shafa'];
+    document.querySelectorAll('#fasad-group .chip').forEach(c => {
+      const ok = wideMode ? allowedWide.includes(c.dataset.val) : r.fasad.includes(c.dataset.val);
+      c.classList.toggle('fade', !ok);
+      if (!ok && c.classList.contains('active')) {
+        c.classList.remove('active');
+        const first = document.querySelector('#fasad-group .chip:not(.fade)');
+        if (first) { first.classList.add('active'); currentFasad = first.dataset.val; }
+      }
+    });
+    const rowNisha = document.getElementById('row-nisha');
+    if (wideMode) {
+      rowNisha.classList.add('hidden');
+      const togNisha = document.getElementById('tog-nisha');
+      if (togNisha.classList.contains('on')) { togNisha.classList.remove('on'); updateBazaTsokolOpory(); }
+    } else {
+      rowNisha.classList.remove('hidden');
+    }
+    const vkladna = document.getElementById('krysha-vkladna');
+    if (vkladna) {
+      vkladna.classList.toggle('fade', wideMode);
+      if (wideMode && vkladna.classList.contains('active')) {
+        vkladna.classList.remove('active');
+        document.getElementById('krysha-nakladna').classList.add('active');
+        updateKryshaOptions();
+      }
+    }
+  }
+
+  /* ── Baza / Tsokol / Opory ── */
+  function isBezdnaOn() { return document.getElementById('tog-bezdna').classList.contains('on'); }
 
   function updateBazaTsokolOpory() {
     const w = getCurrentWidth();
     const showBlocks = currentCorpus === 'shafa' && w <= 2770;
-
     document.getElementById('section-baza').style.display   = showBlocks ? '' : 'none';
     document.getElementById('section-tsokol').style.display = showBlocks ? '' : 'none';
-    document.getElementById('section-opory').style.display  = showBlocks ? '' : 'none';
 
     const showKrysha = currentCorpus === 'shafa' || currentCorpus === 'navisna';
     document.getElementById('section-krysha').style.display = showKrysha ? '' : 'none';
@@ -648,7 +726,6 @@
     if (!showBlocks) return;
 
     const bezdna = isBezdnaOn();
-
     ['baza-dno','baza-komb-l','baza-komb-r'].forEach(id => {
       const el = document.getElementById(id);
       el.classList.toggle('fade', bezdna);
@@ -657,23 +734,18 @@
         document.querySelector('#baza-group .chip[data-val="pidlohu"]').classList.add('active');
       }
     });
-
     if (bezdna) {
       document.getElementById('tsokol-z-vysotoyu').classList.remove('active');
       document.getElementById('tsokol-bez').classList.add('active');
     }
-
     const activeBazaEl = document.querySelector('#baza-group .chip.active');
     const baza = activeBazaEl ? activeBazaEl.dataset.val : 'pidlohu';
-
     const isPidlohu = baza === 'pidlohu';
     const isDno = baza === 'dno';
     const isKomb = baza === 'komb-l' || baza === 'komb-r';
 
     const bezTsokol = document.getElementById('tsokol-bez').classList.contains('active');
-
     document.getElementById('section-opory').style.display = (isKomb || !bezTsokol) ? 'none' : '';
-
     document.querySelector('#opory-group .chip[data-val="m6"]').classList.toggle('fade', isDno);
     document.querySelector('#opory-group .chip[data-val="record"]').classList.toggle('fade', isDno);
     document.getElementById('tsokol-input-wrap').style.display = bezTsokol ? 'none' : '';
@@ -681,22 +753,27 @@
     const plintusRow = document.getElementById('row-plintus');
     const showPlintus = !bezTsokol && !isDno;
     plintusRow.style.display = showPlintus ? 'flex' : 'none';
-    if (!showPlintus) {
-      document.getElementById('tog-plintus').classList.remove('on');
-      document.getElementById('plintus-input-wrap').style.display = 'none';
-    }
+    if (!showPlintus) { document.getElementById('tog-plintus').classList.remove('on'); document.getElementById('plintus-input-wrap').style.display='none'; }
+
     document.getElementById('row-vidstyp').style.display = (!bezTsokol && (isDno || isKomb)) ? 'flex' : 'none';
 
     const dnoNeedsBez = isDno && !bezTsokol;
     document.getElementById('opora-27').classList.toggle('fade', isPidlohu || dnoNeedsBez);
     document.getElementById('opora-int').classList.toggle('fade', isPidlohu || dnoNeedsBez);
-
     const fadedOpora = document.querySelector('#opory-group .chip.active.fade');
     if (fadedOpora) {
       fadedOpora.classList.remove('active');
       const firstOk = document.querySelector('#opory-group .chip:not(.fade)');
       if (firstOk) firstOk.classList.add('active');
     }
+
+    // Update summary values
+    const bazaLabels = { pidlohu:'Стійки на підлогу', dno:'Стійки на дно', 'komb-l':'Комбінована ліва', 'komb-r':'Комбінована права' };
+    setVal('val-baza', bazaLabels[baza] || baza);
+    const tsText = bezTsokol ? 'Без цоколю' : 'Висота · ' + document.getElementById('inp-tsokol').value + ' мм';
+    setVal('val-tsokol', tsText);
+    const activeOpora = document.querySelector('#opory-group .chip.active');
+    setVal('val-opory', activeOpora ? activeOpora.textContent : '—');
   }
 
   function updateKryshaOptions() {
@@ -712,24 +789,46 @@
     }
     const activeKrysha = document.querySelector('#krysha-group .chip.active');
     const krysha = activeKrysha ? activeKrysha.dataset.val : 'nakladna';
-    const showNavis = krysha === 'nakladna' && currentFasad === 'nakladnyi'
-                      && (currentCorpus === 'shafa' || currentCorpus === 'navisna');
-    const rowNavis = document.getElementById('row-navisannia');
-    rowNavis.style.display = showNavis ? 'flex' : 'none';
+    const showNavis = krysha === 'nakladna' && currentFasad === 'nakladnyi' && (currentCorpus === 'shafa' || currentCorpus === 'navisna');
+    document.getElementById('row-navisannia').style.display = showNavis ? 'flex' : 'none';
     if (!showNavis) document.getElementById('tog-navisannia').classList.remove('on');
+    setVal('val-krysha', krysha === 'vkladna' ? 'Вкладна' : 'Накладна');
   }
 
-  document.querySelectorAll('#krysha-group .chip').forEach(chip => {
+  /* ── Chip event listeners ── */
+  document.querySelectorAll('#corpus-group .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#corpus-group .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      currentCorpus = chip.dataset.val;
+      updateOptionsVal();
+      collapseAcc('acc-corpus');
+      applyCorpusRules(currentCorpus);
+    });
+  });
+
+  document.querySelectorAll('#fasad-group .chip').forEach(chip => {
     chip.addEventListener('click', () => {
       if (chip.classList.contains('fade')) return;
-      document.querySelectorAll('#krysha-group .chip').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('#fasad-group .chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
+      currentFasad = chip.dataset.val;
+      setVal('val-fasad', FASAD_LABELS[currentFasad] || currentFasad);
+      collapseAcc('acc-fasad');
+      applyLimits();
+      updateFasadByWidth();
       updateKryshaOptions();
     });
   });
 
-  document.getElementById('tog-navisannia').addEventListener('click', function() {
-    this.classList.toggle('on');
+  document.querySelectorAll('#zadnia-group .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      if (chip.classList.contains('fade')) return;
+      document.querySelectorAll('#zadnia-group .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      setVal('val-zadnia', chip.textContent);
+      collapseAcc('acc-zadnia');
+    });
   });
 
   document.querySelectorAll('#baza-group .chip').forEach(chip => {
@@ -737,6 +836,7 @@
       if (chip.classList.contains('fade')) return;
       document.querySelectorAll('#baza-group .chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
+      collapseAcc('section-baza');
       updateBazaTsokolOpory();
     });
   });
@@ -746,12 +846,19 @@
       if (chip.classList.contains('fade')) return;
       document.querySelectorAll('#opory-group .chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
+      setVal('val-opory', chip.textContent);
+      collapseAcc('section-opory');
     });
   });
 
-  document.getElementById('tog-plintus').addEventListener('click', function() {
-    this.classList.toggle('on');
-    document.getElementById('plintus-input-wrap').style.display = this.classList.contains('on') ? '' : 'none';
+  document.querySelectorAll('#krysha-group .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      if (chip.classList.contains('fade')) return;
+      document.querySelectorAll('#krysha-group .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      collapseAcc('section-krysha');
+      updateKryshaOptions();
+    });
   });
 
   [document.getElementById('tsokol-z-vysotoyu'), document.getElementById('tsokol-bez')].forEach(chip => {
@@ -762,9 +869,24 @@
     });
   });
 
+  document.getElementById('inp-tsokol').addEventListener('input', () => {
+    const v = document.getElementById('inp-tsokol').value;
+    setVal('val-tsokol', 'Висота · ' + v + ' мм');
+  });
+
+  document.getElementById('tog-plintus').addEventListener('click', function() {
+    this.classList.toggle('on');
+    document.getElementById('plintus-input-wrap').style.display = this.classList.contains('on') ? '' : 'none';
+  });
+
+  document.getElementById('tog-navisannia').addEventListener('click', function() {
+    this.classList.toggle('on');
+  });
+
   document.querySelectorAll('.toggle:not(#tog-plintus):not(#tog-navisannia)').forEach(tog => {
     tog.addEventListener('click', () => {
       tog.classList.toggle('on');
+      updateOptionsVal();
       updateBazaTsokolOpory();
     });
   });
@@ -774,38 +896,31 @@
   document.getElementById('rng-vysota').addEventListener('input', updateRozsuvnaAvailability);
   document.getElementById('inp-vysota').addEventListener('input', updateRozsuvnaAvailability);
 
-  document.getElementById('btn-next').addEventListener('click', () => {
-    alert('Базовий модуль налаштовано. Переходимо до наповнення!');
-  });
-
+  /* ── Materials ── */
   const FALLBACK_MATERIALS = [
-    { id:11307, name:"ДСП 11307 Egger Фарфор білий W1200 ST9",       url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph11307.jpg" },
-    { id:48501, name:"ДСП 48501 Egger Білий преміум W1000 ST9",       url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph48501_SJKXp.jpg" },
-    { id:95843, name:"ДСП 34042 Egger Дуб Бардоліно H1145 ST10",     url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph95843_RDw0W.jpg" },
-    { id:173481,name:"ДСП 173481 Egger Карат бежевий U115 ST9",       url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph173481.jpg" },
-    { id:173495,name:"ДСП 173495 Egger Ангора сірий U705 ST9",        url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph173495.jpg" },
-    { id:17760, name:"ДСП 17760 SK Білий 110 SM",                     url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph17760.jpg" },
-    { id:18073, name:"ДСП 18073 SK Чорний PE",                        url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph18073.jpg" },
-    { id:127335,name:"ДСП 127335 SK Бетон Стайл VL",                  url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph127335.jpg" },
-    { id:29454, name:"ДСП 29454 KR Чорний PE",                        url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph29454.jpg" },
+    { id:11307, name:"ДСП 11307 Egger Фарфор білий W1200 ST9",    url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph11307.jpg" },
+    { id:48501, name:"ДСП 48501 Egger Білий преміум W1000 ST9",    url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph48501_SJKXp.jpg" },
+    { id:95843, name:"ДСП 34042 Egger Дуб Бардоліно H1145 ST10",  url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph95843_RDw0W.jpg" },
+    { id:173481,name:"ДСП 173481 Egger Карат бежевий U115 ST9",    url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph173481.jpg" },
+    { id:173495,name:"ДСП 173495 Egger Ангора сірий U705 ST9",     url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph173495.jpg" },
+    { id:17760, name:"ДСП 17760 SK Білий 110 SM",                  url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph17760.jpg" },
+    { id:18073, name:"ДСП 18073 SK Чорний PE",                     url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph18073.jpg" },
+    { id:127335,name:"ДСП 127335 SK Бетон Стайл VL",               url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph127335.jpg" },
+    { id:29454, name:"ДСП 29454 KR Чорний PE",                     url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph29454.jpg" },
   ];
 
   let allMaterials = [];
   let selectedMaterial = null;
   let materialsLoaded = false;
-  let accordionOpen = false;
-
   const MATERIALS_URL = 'https://rohunt76.github.io/furniture-configurator/data/materials.json';
 
   async function loadMaterials() {
     try {
       const r = await fetch(MATERIALS_URL);
-      if (!r.ok) throw new Error('HTTP ' + r.status);
+      if (!r.ok) throw new Error();
       const data = await r.json();
       allMaterials = data.materials || [];
-    } catch {
-      allMaterials = FALLBACK_MATERIALS;
-    }
+    } catch { allMaterials = FALLBACK_MATERIALS; }
     materialsLoaded = true;
     document.getElementById('mat-loading').style.display = 'none';
     filterMaterials();
@@ -826,43 +941,29 @@
     materials.forEach(m => {
       const div = document.createElement('div');
       div.className = 'mat-item' + (selectedMaterial && selectedMaterial.id === m.id ? ' selected' : '');
-      div.innerHTML = `
-        <div class="mat-circle">
-          ${m.url_texture ? `<img src="${m.url_texture}" alt="" loading="lazy">` : ''}
-        </div>
-        <div class="mat-tooltip">${m.name}</div>
-      `;
-      div.addEventListener('click', () => selectMaterial(m));
+      div.innerHTML = `<div class="mat-circle"><div class="mat-circle-inner">${m.url_texture ? `<img src="${m.url_texture}" alt="" loading="lazy">` : ''}</div></div><div class="mat-tooltip">${m.name}</div>`;
+      div.addEventListener('click', (e) => selectMaterial(m, div));
       grid.appendChild(div);
     });
   }
 
-  function selectMaterial(m) {
+  function selectMaterial(m, el) {
     selectedMaterial = m;
-    document.querySelectorAll('.mat-item').forEach(el => el.classList.remove('selected'));
-    event.currentTarget.classList.add('selected');
-
-    const preview = document.getElementById('mat-selected-preview');
+    document.querySelectorAll('.mat-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+    // Update header
+    document.getElementById('mat-header-empty').style.display = 'none';
+    const preview = document.getElementById('mat-header-preview');
     preview.style.display = 'flex';
-    document.getElementById('mat-sel-name').textContent = m.name;
-    const img = document.getElementById('mat-sel-img');
+    document.getElementById('mat-header-name').textContent = m.name;
+    const img = document.getElementById('mat-header-img');
     if (m.url_texture) { img.src = m.url_texture; img.style.display = 'block'; }
-    else { img.style.display = 'none'; }
   }
 
-  async function toggleMaterialAccordion() {
-    accordionOpen = !accordionOpen;
-    const accordion = document.getElementById('mat-accordion');
-    const arrow = document.getElementById('mat-accordion-arrow');
-    accordion.style.display = accordionOpen ? 'block' : 'none';
-    arrow.style.transform = accordionOpen ? 'rotate(180deg)' : '';
-    if (accordionOpen && !materialsLoaded) {
-      await loadMaterials();
-    }
-  }
-
+  /* ── Init ── */
   currentFasad = 'nakladnyi';
   applyCorpusRules('shafa');
+  updateOptionsVal();
   updateRozsuvnaAvailability();
   updateBazaTsokolOpory();
 </script>
