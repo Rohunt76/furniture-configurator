@@ -153,7 +153,46 @@
   }
   .dim-item.has-error .dim-error { display: block; }
 
-  .hidden { display: none !important; }
+  .mat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    position: relative;
+  }
+  .mat-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: border-color 0.15s, transform 0.15s;
+    background: #e8e6e0;
+  }
+  .mat-circle img { width:100%; height:100%; object-fit:cover; }
+  .mat-item:hover .mat-circle { border-color: #2c2c2a; transform: scale(1.06); }
+  .mat-item.selected .mat-circle { border-color: #2c2c2a; box-shadow: 0 0 0 3px rgba(44,44,42,0.15); }
+  .mat-tooltip {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2c2c2a;
+    color: #f1efe8;
+    font-size: 11px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 100;
+    max-width: 160px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .mat-item:hover .mat-tooltip { display: block; }
+
   .sidebar-footer {
     padding: 18px 22px;
     background: #faf9f6;
@@ -347,6 +386,31 @@
       </div>
     </div>
   </div>
+
+  <div class="section">
+    <div style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="toggleMaterialAccordion()">
+      <p class="section-label" style="margin-bottom:0;">Матеріал корпусу</p>
+      <span id="mat-accordion-arrow" style="font-size:11px; color:#aaa; transition:transform 0.2s;">▼</span>
+    </div>
+
+    <div id="mat-selected-preview" style="display:none; align-items:center; gap:10px; margin-top:10px;">
+      <div style="width:36px; height:36px; border-radius:50%; overflow:hidden; border:1px solid #ddd; flex-shrink:0; background:#e8e6e0;">
+        <img id="mat-sel-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;">
+      </div>
+      <span id="mat-sel-name" style="font-size:12px; color:#555; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></span>
+    </div>
+
+    <div id="mat-accordion" style="display:none; margin-top:12px;">
+      <input type="text" id="mat-search" placeholder="Пошук матеріалу..." oninput="filterMaterials()" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:13px; outline:none; background:#faf9f6; margin-bottom:12px;">
+      <div style="max-height:320px; overflow-y:auto; overflow-x:hidden;">
+        <div id="mat-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:4px;"></div>
+      </div>
+      <div id="mat-empty" style="display:none; text-align:center; font-size:13px; color:#aaa; padding:24px 0;">Нічого не знайдено</div>
+      <div id="mat-loading" style="text-align:center; font-size:13px; color:#aaa; padding:24px 0;">Завантаження...</div>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
     <button class="btn-primary" id="btn-next">
       Перейти до наповнення →
     </button>
@@ -411,6 +475,30 @@
         if (first) { first.classList.add('active'); currentFasad = first.dataset.val; }
       }
     });
+
+    // У нішу до стелі — ховаємо при ширині > 2770
+    const rowNisha = document.getElementById('row-nisha');
+    if (wideMode) {
+      rowNisha.classList.add('hidden');
+      const togNisha = document.getElementById('tog-nisha');
+      if (togNisha.classList.contains('on')) {
+        togNisha.classList.remove('on');
+        updateBazaTsokolOpory();
+      }
+    } else {
+      rowNisha.classList.remove('hidden');
+    }
+
+    // Вкладна криша — недоступна при ширині > 2770
+    const vkladna = document.getElementById('krysha-vkladna');
+    if (vkladna) {
+      vkladna.classList.toggle('fade', wideMode);
+      if (wideMode && vkladna.classList.contains('active')) {
+        vkladna.classList.remove('active');
+        document.getElementById('krysha-nakladna').classList.add('active');
+        updateKryshaOptions();
+      }
+    }
   }
 
   const DIMS = [
@@ -613,10 +701,11 @@
 
   function updateKryshaOptions() {
     const nishaOn = document.getElementById('tog-nisha') && document.getElementById('tog-nisha').classList.contains('on');
+    const wideMode = currentCorpus === 'shafa' && getCurrentWidth() > 2770;
     const vkladna = document.getElementById('krysha-vkladna');
-    if (nishaOn) {
-      document.getElementById('krysha-nakladna').classList.remove('active');
-      vkladna.classList.add('active');
+    if (nishaOn || wideMode) {
+      document.getElementById('krysha-nakladna').classList.add('active');
+      vkladna.classList.remove('active');
       vkladna.classList.add('fade');
     } else {
       vkladna.classList.remove('fade');
@@ -688,6 +777,89 @@
   document.getElementById('btn-next').addEventListener('click', () => {
     alert('Базовий модуль налаштовано. Переходимо до наповнення!');
   });
+
+  const FALLBACK_MATERIALS = [
+    { id:11307, name:"ДСП 11307 Egger Фарфор білий W1200 ST9",       url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph11307.jpg" },
+    { id:48501, name:"ДСП 48501 Egger Білий преміум W1000 ST9",       url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph48501_SJKXp.jpg" },
+    { id:95843, name:"ДСП 34042 Egger Дуб Бардоліно H1145 ST10",     url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph95843_RDw0W.jpg" },
+    { id:173481,name:"ДСП 173481 Egger Карат бежевий U115 ST9",       url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph173481.jpg" },
+    { id:173495,name:"ДСП 173495 Egger Ангора сірий U705 ST9",        url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph173495.jpg" },
+    { id:17760, name:"ДСП 17760 SK Білий 110 SM",                     url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph17760.jpg" },
+    { id:18073, name:"ДСП 18073 SK Чорний PE",                        url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph18073.jpg" },
+    { id:127335,name:"ДСП 127335 SK Бетон Стайл VL",                  url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph127335.jpg" },
+    { id:29454, name:"ДСП 29454 KR Чорний PE",                        url_texture:"https://viyar.ua/upload/resize_cache/photos/512_512_1/ph29454.jpg" },
+  ];
+
+  let allMaterials = [];
+  let selectedMaterial = null;
+  let materialsLoaded = false;
+  let accordionOpen = false;
+
+  const MATERIALS_URL = 'https://rohunt76.github.io/furniture-configurator/data/materials.json';
+
+  async function loadMaterials() {
+    try {
+      const r = await fetch(MATERIALS_URL);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const data = await r.json();
+      allMaterials = data.materials || [];
+    } catch {
+      allMaterials = FALLBACK_MATERIALS;
+    }
+    materialsLoaded = true;
+    document.getElementById('mat-loading').style.display = 'none';
+    filterMaterials();
+  }
+
+  function filterMaterials() {
+    const q = (document.getElementById('mat-search').value || '').trim().toLowerCase();
+    const filtered = allMaterials.filter(m => !q || m.name.toLowerCase().includes(q));
+    renderGrid(filtered);
+  }
+
+  function renderGrid(materials) {
+    const grid = document.getElementById('mat-grid');
+    const empty = document.getElementById('mat-empty');
+    grid.innerHTML = '';
+    if (!materials.length) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    materials.forEach(m => {
+      const div = document.createElement('div');
+      div.className = 'mat-item' + (selectedMaterial && selectedMaterial.id === m.id ? ' selected' : '');
+      div.innerHTML = `
+        <div class="mat-circle">
+          ${m.url_texture ? `<img src="${m.url_texture}" alt="" loading="lazy">` : ''}
+        </div>
+        <div class="mat-tooltip">${m.name}</div>
+      `;
+      div.addEventListener('click', () => selectMaterial(m));
+      grid.appendChild(div);
+    });
+  }
+
+  function selectMaterial(m) {
+    selectedMaterial = m;
+    document.querySelectorAll('.mat-item').forEach(el => el.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+
+    const preview = document.getElementById('mat-selected-preview');
+    preview.style.display = 'flex';
+    document.getElementById('mat-sel-name').textContent = m.name;
+    const img = document.getElementById('mat-sel-img');
+    if (m.url_texture) { img.src = m.url_texture; img.style.display = 'block'; }
+    else { img.style.display = 'none'; }
+  }
+
+  async function toggleMaterialAccordion() {
+    accordionOpen = !accordionOpen;
+    const accordion = document.getElementById('mat-accordion');
+    const arrow = document.getElementById('mat-accordion-arrow');
+    accordion.style.display = accordionOpen ? 'block' : 'none';
+    arrow.style.transform = accordionOpen ? 'rotate(180deg)' : '';
+    if (accordionOpen && !materialsLoaded) {
+      await loadMaterials();
+    }
+  }
 
   currentFasad = 'nakladnyi';
   applyCorpusRules('shafa');
