@@ -1,6 +1,6 @@
 {
   "_comment": "Каталог матеріалів. Поля nayvnist, price_site, aktsia, chystyy_rozmir оновлюються автоматично через GitHub Actions.",
-  "_updated": "2026-04-26T07:48:21Z",
+  "_updated": "2026-04-27T08:21:02Z",
   "materials": [
     {
       "id": 48501,
